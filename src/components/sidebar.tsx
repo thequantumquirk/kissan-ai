@@ -3,6 +3,14 @@ import { Menu, MessagesSquare, Plus, Trash, X } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
 import { Button } from "./ui/button";
 import { ChatIdContext } from "./chatid-provider";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+} from "./ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
 
 const ChatbotSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -42,7 +50,6 @@ const ChatbotSidebar = () => {
   useEffect(() => {
     let savedChats = localStorage.getItem("savedChats");
     if (savedChats) {
-      console.log(savedChats);
       setChats(JSON.parse(savedChats));
     } else if (chats.length === 0) {
       let newChat = {
@@ -82,18 +89,42 @@ const ChatbotSidebar = () => {
                       <MessagesSquare />
                       <span>{chat.name}</span>
                     </div>
-                    <button
-                      className="flex justify-end"
-                      onClick={() => deleteChat(chat.key)}
-                    >
-                      <Trash />
-                    </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button className="flex justify-end">
+                          <Trash />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <h1>Do you want to delete the Chat?</h1>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <div className="flex gap-2">
+                            <DialogClose asChild>
+                              <Button type="button" variant="secondary">
+                                No
+                              </Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button
+                                onClick={() => deleteChat(chat.key)}
+                                type="button"
+                              >
+                                Yes
+                              </Button>
+                            </DialogClose>
+                          </div>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
                   </div>
                 </button>
               ))}
             </div>
           </>
         )}
+
         <Button
           className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
           onClick={handleCloseSidebar}
