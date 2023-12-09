@@ -163,21 +163,21 @@ const ChatbotSidebar = () => {
                       </HoverCardContent>
                     </HoverCard>
                     <Dialog>
-                      <DialogTrigger asChild>
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
+                      <HoverCard>
+                        <HoverCardTrigger asChild>
+                          <DialogTrigger asChild>
                             <button>
                               <Trash
                                 size={20}
                                 className="opacity-50 hover:opacity-100 transition-all"
                               />
                             </button>
-                          </HoverCardTrigger>
-                          <HoverCardContent>
-                            Delete the Chat Instance
-                          </HoverCardContent>
-                        </HoverCard>
-                      </DialogTrigger>
+                          </DialogTrigger>
+                        </HoverCardTrigger>
+                        <HoverCardContent>
+                          Delete the Chat Instance
+                        </HoverCardContent>
+                      </HoverCard>
                       <DialogContent>
                         <DialogHeader>
                           <h1>Do you want to delete the Chat?</h1>
