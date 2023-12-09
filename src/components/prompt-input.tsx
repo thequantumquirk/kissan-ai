@@ -48,6 +48,7 @@ export default function PromptInput() {
 
   const sendReqQuery = useMutation({
     mutationFn: async (text: string) => {
+      handleChatPresenceChange(true);
       insertMessage(text, "user");
       const { data } = await axios.post(
         "https://api-v2.longshot.ai/custom/api/generate/instruct",
@@ -103,6 +104,11 @@ export default function PromptInput() {
           placeholder="Enter your Prompt"
           value={prompt}
           onChange={handlePrompt}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !sendReqQuery.isPending && prompt) {
+              sendReqQuery.mutate(prompt);
+            }
+          }}
         />
         <HoverCard>
           <HoverCardTrigger asChild>

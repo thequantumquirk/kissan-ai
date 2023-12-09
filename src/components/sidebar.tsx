@@ -139,6 +139,11 @@ const ChatbotSidebar = () => {
                       <Input
                         defaultValue={chat.name}
                         onChange={handleChatRename}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            renameChat(chat.key);
+                          }
+                        }}
                       />
                       <button onClick={() => renameChat(chat.key)}>
                         <Check />
