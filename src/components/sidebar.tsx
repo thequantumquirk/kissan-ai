@@ -22,6 +22,7 @@ import { usePathname } from "next/navigation";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatType } from "@/types/ChatType";
 import { Input } from "./ui/input";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
@@ -38,16 +39,18 @@ const ChatbotSidebar = () => {
   };
 
   const renameChat = (id: string) => {
-    setChats((prevChats: any) => {
-      const updatedChats = prevChats.map((chat: any) => {
-        if (chat.key === id) {
-          chat.name = chatName;
-        }
-        return chat;
+    if (chatName) {
+      setChats((prevChats: any) => {
+        const updatedChats = prevChats.map((chat: any) => {
+          if (chat.key === id) {
+            chat.name = chatName;
+          }
+          return chat;
+        });
+        localStorage.setItem("savedChats", JSON.stringify(updatedChats));
+        return updatedChats;
       });
-      localStorage.setItem("savedChats", JSON.stringify(updatedChats));
-      return updatedChats;
-    });
+    }
     setRenameChatId("");
   };
 
@@ -143,23 +146,37 @@ const ChatbotSidebar = () => {
                     </div>
                   )}
                   <div className="flex gap-4 items-center">
-                    <button
-                      className="flex justify-end"
-                      onClick={() => setRenameChatId(chat.key)}
-                    >
-                      <Pencil
-                        size={20}
-                        className="opacity-50 hover:opacity-100 transition-all"
-                      />
-                    </button>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <button>
-                          <Trash
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <button
+                          className="flex justify-end"
+                          onClick={() => setRenameChatId(chat.key)}
+                        >
+                          <Pencil
                             size={20}
                             className="opacity-50 hover:opacity-100 transition-all"
                           />
                         </button>
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        Rename the Chat Instance
+                      </HoverCardContent>
+                    </HoverCard>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <HoverCard>
+                          <HoverCardTrigger asChild>
+                            <button>
+                              <Trash
+                                size={20}
+                                className="opacity-50 hover:opacity-100 transition-all"
+                              />
+                            </button>
+                          </HoverCardTrigger>
+                          <HoverCardContent>
+                            Delete the Chat Instance
+                          </HoverCardContent>
+                        </HoverCard>
                       </DialogTrigger>
                       <DialogContent>
                         <DialogHeader>
@@ -190,13 +207,17 @@ const ChatbotSidebar = () => {
             </div>
           </>
         )}
-
-        <Button
-          className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
-          onClick={handleCloseSidebar}
-        >
-          <X />
-        </Button>
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button
+              className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
+              onClick={handleCloseSidebar}
+            >
+              <X />
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent>Close the Sidebar</HoverCardContent>
+        </HoverCard>
       </div>
     </div>
   );
@@ -204,9 +225,17 @@ const ChatbotSidebar = () => {
   return (
     <>
       {!isOpen && (
-        <Button className={`absolute top-5 left-5`} onClick={handleOpenSidebar}>
-          <Menu />
-        </Button>
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button
+              className={`absolute top-5 left-5`}
+              onClick={handleOpenSidebar}
+            >
+              <Menu />
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent>Open the Sidebar</HoverCardContent>
+        </HoverCard>
       )}
       {renderSidebar()}
     </>

@@ -13,6 +13,7 @@ import { AxiosError } from "axios";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatContext } from "./chat-provider";
 import { useToast } from "@/components/ui/use-toast";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 
 export default function PromptInput() {
   const { toast } = useToast();
@@ -103,12 +104,22 @@ export default function PromptInput() {
           value={prompt}
           onChange={handlePrompt}
         />
-        <Button
-          disabled={sendReqQuery.isPending}
-          onClick={() => sendReqQuery.mutate(prompt)}
-        >
-          {sendReqQuery.isPending ? <Loader /> : <SendHorizonal />}
-        </Button>
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button
+              onClick={() =>
+                !sendReqQuery.isPending && prompt && sendReqQuery.mutate(prompt)
+              }
+            >
+              {sendReqQuery.isPending ? <Loader /> : <SendHorizonal />}
+            </Button>
+          </HoverCardTrigger>
+          <HoverCardContent>
+            {sendReqQuery.isPending
+              ? "Please wait till we fetch your query"
+              : "Send your Query"}
+          </HoverCardContent>
+        </HoverCard>
       </div>
     </>
   );
