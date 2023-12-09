@@ -12,14 +12,17 @@ import {
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { usePathname } from "next/navigation";
 import { ChatIdContext } from "./chatid-provider";
+import { ChatType } from "@/types/ChatType";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [chats, setChats] = useState<any>([]);
+  const [chats, setChats] = useState<ChatType[] | []>([]);
   const { setChatId } = useContext(ChatIdContext);
+
   const handleOpenSidebar = () => setIsOpen(true);
   const handleCloseSidebar = () => setIsOpen(false);
+
   const createChat = () => {
     let newChat = {
       key: crypto.randomUUID(),
@@ -35,6 +38,7 @@ const ChatbotSidebar = () => {
       setChats([newChat]);
       localStorage.setItem("savedChats", JSON.stringify([newChat]));
     }
+    updateChatId(newChat.key);
   };
 
   const updateChatId = (id: string) => {
@@ -52,20 +56,16 @@ const ChatbotSidebar = () => {
   };
 
   useEffect(() => {
-    let savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]");
+    let savedChats: ChatType[] | [] = JSON.parse(
+      localStorage.getItem("savedChats") || "[]"
+    );
     let chatId = pathname.replace("/", "");
-    let chatIdExists = savedChats.some((chat) => chat.key === chatId);
+    let chatIdExists = savedChats.some((chat: ChatType) => chat.key === chatId);
     if (savedChats.length > 0) {
       setChats(savedChats);
       setChatId(chatId);
     } else {
-      let newChat = {
-        key: crypto.randomUUID(),
-        name: "New Chat",
-      };
-      setChats([newChat]);
-      localStorage.setItem("savedChats", JSON.stringify([newChat]));
-      updateChatId(newChat.key);
+      createChat();
     }
     if (chats.length > 0 && !chatIdExists) {
       updateChatId(chats[0].key);
@@ -90,7 +90,7 @@ const ChatbotSidebar = () => {
           <>
             <p className="font-bold my-1">Your chats</p>
             <div className="flex flex-col gap-2 my-2 w-full h-[92vh] overflow-y-scroll">
-              {chats.map((chat: any) => (
+              {chats.map((chat: ChatType) => (
                 <div
                   className="flex items-center justify-between gap-2 rounded-lg bg-background px-6 py-4"
                   key={chat.key}

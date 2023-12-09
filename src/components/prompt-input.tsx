@@ -8,8 +8,8 @@ import { useMutation } from "@tanstack/react-query";
 import Loader from "./ui/loader";
 import { MessageType } from "@/types/MessageType";
 import MessagesSection from "./messages";
-
 import axios from "axios";
+import { AxiosError } from "axios";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatContext } from "./chat-provider";
 import { useToast } from "@/components/ui/use-toast";
@@ -17,35 +17,37 @@ import { useToast } from "@/components/ui/use-toast";
 export default function PromptInput() {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
-  const { chatId, setChatId } = useContext(ChatIdContext);
+  const [chatResponse, setChatResponse] = useState<MessageType[] | null>(null);
+  const { chatId } = useContext(ChatIdContext);
+  const { isChatPresent, setIsChatPresent } = useContext(ChatContext);
+
   const handlePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPrompt(e.target.value);
   };
-  const [chatResponse, setChatResponse] = useState<MessageType[] | null>(null);
-  const { isChatPresent, setIsChatPresent } = useContext(ChatContext);
 
   const handleChatPresenceChange = (val: boolean) => {
     setIsChatPresent(val);
   };
+
+  const insertMessage = (text: string, role: "user" | "assistant") => {
+    const message: MessageType = {
+      id: crypto.randomUUID(),
+      role,
+      content: text,
+    };
+    setChatResponse((prev: any) => {
+      const updatedChatResponse = prev ? [...prev, message] : [message];
+      localStorage.setItem(chatId, JSON.stringify(updatedChatResponse));
+      return updatedChatResponse;
+    });
+    if (role === "user") {
+      setPrompt("");
+    }
+  };
+
   const sendReqQuery = useMutation({
     mutationFn: async (text: string) => {
-      let userMessage: MessageType = {
-        id: crypto.randomUUID(),
-        role: "user",
-        content: text,
-      };
-      if (chatResponse) {
-        setChatResponse((prev: any) => {
-          const updatedChatResponse = [...prev, userMessage];
-          localStorage.setItem(chatId, JSON.stringify(updatedChatResponse));
-          return updatedChatResponse;
-        });
-      } else {
-        handleChatPresenceChange(true);
-        setChatResponse([userMessage]);
-        localStorage.setItem(chatId, JSON.stringify([userMessage]));
-      }
-      setPrompt("");
+      insertMessage(text, "user");
       const { data } = await axios.post(
         "https://api-v2.longshot.ai/custom/api/generate/instruct",
         {
@@ -61,30 +63,26 @@ export default function PromptInput() {
       return data;
     },
     onSuccess: (data) => {
-      let message: MessageType = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content: data.copies[0].content,
-      };
-      setChatResponse((prev: any) => {
-        console.log("Hello");
-        const updatedChatResponse = [...prev, message];
-        localStorage.setItem(chatId, JSON.stringify(updatedChatResponse));
-        return updatedChatResponse;
-      });
+      insertMessage(data.copies[0].content, "assistant");
     },
     onError: (error) => {
-      toast({
-        title: "An error occured.",
-        description: error.response.data.detail,
-      });
+      if (error) {
+        const axiosError = error as AxiosError;
+        const { detail } =
+          (axiosError.response?.data as {
+            detail: string;
+          }) || "Unknown error";
+        toast({
+          title: "An error occured.",
+          description: detail,
+        });
+      }
     },
   });
 
   useEffect(() => {
     if (chatId) {
       let savedMessages = localStorage.getItem(chatId);
-      console.log(isChatPresent);
       if (savedMessages) {
         handleChatPresenceChange(true);
         setChatResponse(JSON.parse(savedMessages));
