@@ -12,8 +12,10 @@ import MessagesSection from "./messages";
 import axios from "axios";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatContext } from "./chat-provider";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function PromptInput() {
+  const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
   const { chatId, setChatId } = useContext(ChatIdContext);
   const handlePrompt = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,6 +71,12 @@ export default function PromptInput() {
         const updatedChatResponse = [...prev, message];
         localStorage.setItem(chatId, JSON.stringify(updatedChatResponse));
         return updatedChatResponse;
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "An error occured.",
+        description: error.response.data.detail,
       });
     },
   });
