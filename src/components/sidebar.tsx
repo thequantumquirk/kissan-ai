@@ -1,5 +1,13 @@
 "use client";
-import { Menu, MessagesSquare, Plus, Trash, X } from "lucide-react";
+import {
+  Check,
+  Menu,
+  MessagesSquare,
+  Pencil,
+  Plus,
+  Trash,
+  X,
+} from "lucide-react";
 import { useState, useEffect, useContext } from "react";
 import { Button } from "./ui/button";
 import {
@@ -13,15 +21,35 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { usePathname } from "next/navigation";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatType } from "@/types/ChatType";
+import { Input } from "./ui/input";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [chats, setChats] = useState<ChatType[] | []>([]);
+  const [renameChatId, setRenameChatId] = useState<string>("");
+  const [chatName, setChatName] = useState<string>("");
   const { setChatId } = useContext(ChatIdContext);
 
   const handleOpenSidebar = () => setIsOpen(true);
   const handleCloseSidebar = () => setIsOpen(false);
+  const handleChatRename = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setChatName(e.target.value);
+  };
+
+  const renameChat = (id: string) => {
+    setChats((prevChats: any) => {
+      const updatedChats = prevChats.map((chat: any) => {
+        if (chat.key === id) {
+          chat.name = chatName;
+        }
+        return chat;
+      });
+      localStorage.setItem("savedChats", JSON.stringify(updatedChats));
+      return updatedChats;
+    });
+    setRenameChatId("");
+  };
 
   const createChat = () => {
     let newChat = {
@@ -95,41 +123,68 @@ const ChatbotSidebar = () => {
                   className="flex items-center justify-between gap-2 rounded-lg bg-background px-6 py-4"
                   key={chat.key}
                 >
-                  <a href={`/${chat.key}`}>
-                    <div className="flex gap-3">
+                  {renameChatId !== chat.key ? (
+                    <a className="flex gap-3" href={`/${chat.key}`}>
                       <MessagesSquare />
                       <span>{chat.name}</span>
-                    </div>
-                  </a>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <button className="flex justify-end">
-                        <Trash />
+                    </a>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <div>
+                        <MessagesSquare />
+                      </div>
+                      <Input
+                        defaultValue={chat.name}
+                        onChange={handleChatRename}
+                      />
+                      <button onClick={() => renameChat(chat.key)}>
+                        <Check />
                       </button>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <h1>Do you want to delete the Chat?</h1>
-                      </DialogHeader>
-                      <DialogFooter>
-                        <div className="flex gap-2">
-                          <DialogClose asChild>
-                            <Button type="button" variant="secondary">
-                              No
-                            </Button>
-                          </DialogClose>
-                          <DialogClose asChild>
-                            <Button
-                              onClick={() => deleteChat(chat.key)}
-                              type="button"
-                            >
-                              Yes
-                            </Button>
-                          </DialogClose>
-                        </div>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                    </div>
+                  )}
+                  <div className="flex gap-4 items-center">
+                    <button
+                      className="flex justify-end"
+                      onClick={() => setRenameChatId(chat.key)}
+                    >
+                      <Pencil
+                        size={20}
+                        className="opacity-50 hover:opacity-100 transition-all"
+                      />
+                    </button>
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <button>
+                          <Trash
+                            size={20}
+                            className="opacity-50 hover:opacity-100 transition-all"
+                          />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <h1>Do you want to delete the Chat?</h1>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <div className="flex gap-2">
+                            <DialogClose asChild>
+                              <Button type="button" variant="secondary">
+                                No
+                              </Button>
+                            </DialogClose>
+                            <DialogClose asChild>
+                              <Button
+                                onClick={() => deleteChat(chat.key)}
+                                type="button"
+                              >
+                                Yes
+                              </Button>
+                            </DialogClose>
+                          </div>
+                        </DialogFooter>
+                      </DialogContent>
+                    </Dialog>
+                  </div>
                 </div>
               ))}
             </div>
