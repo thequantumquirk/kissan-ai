@@ -6,7 +6,7 @@ export default function MessagesSection({
   messages: MessageType[];
 }) {
   return (
-    <div className="w-[75vw] h-[75vh] flex flex-col gap-2 bg-foreground/10 px-8 py-4 rounded-lg overflow-y-scroll">
+    <div className="w-full lg:w-[75vw] h-[75vh] flex flex-col gap-2 bg-foreground/10 lg:px-8 px-2 py-4 rounded-lg overflow-y-scroll">
       {messages.map((message) => (
         <div
           key={message.id}

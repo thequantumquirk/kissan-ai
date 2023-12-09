@@ -22,8 +22,8 @@ export default function PromptInput() {
   const [chatResponse, setChatResponse] = useState<MessageType[] | null>(null);
   const { isChatPresent, setIsChatPresent } = useContext(ChatContext);
 
-  const handleChatPresenceChange = () => {
-    setIsChatPresent(true);
+  const handleChatPresenceChange = (val: boolean) => {
+    setIsChatPresent(val);
   };
   const sendReqQuery = useMutation({
     mutationFn: async (text: string) => {
@@ -39,7 +39,7 @@ export default function PromptInput() {
           return updatedChatResponse;
         });
       } else {
-        handleChatPresenceChange();
+        handleChatPresenceChange(true);
         setChatResponse([userMessage]);
         localStorage.setItem(chatId, JSON.stringify([userMessage]));
       }
@@ -75,10 +75,13 @@ export default function PromptInput() {
 
   useEffect(() => {
     let savedMessages = localStorage.getItem(chatId);
+    console.log(isChatPresent);
     if (savedMessages) {
-      handleChatPresenceChange();
+      handleChatPresenceChange(true);
       setChatResponse(JSON.parse(savedMessages));
     } else {
+      console.log("on here");
+      handleChatPresenceChange(false);
       setChatResponse(null);
     }
   }, [chatId]);
@@ -88,7 +91,7 @@ export default function PromptInput() {
       {chatResponse && <MessagesSection messages={chatResponse} />}
       <div className="flex gap-2 items-center">
         <Input
-          className="w-[40vw]"
+          className="w-[70vw] lg:w-[40vw]"
           placeholder="Enter your Prompt"
           value={prompt}
           onChange={handlePrompt}

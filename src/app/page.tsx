@@ -16,14 +16,14 @@ export default function Home() {
     <QueryClientProvider client={queryClient}>
       <ChatContext.Provider value={{ isChatPresent, setIsChatPresent }}>
         <ChatIdContext.Provider value={{ chatId, setChatId }}>
-          <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-12">
+          <main className="flex min-h-screen flex-col items-center justify-center gap-4 lg:gap-8 p-4 lg:p-12 lg:mt-0 mt-8">
             <div className="absolute right-5 top-5">
               <ThemeToggle />
             </div>
             {!isChatPresent ? (
               <section className="flex flex-col justify-between items-center h-full">
                 <Image src="/logo.svg" alt="Logo" height={100} width={100} />
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-3xl lg:text-4xl font-bold">
                   The <span className="text-primary">Omnis</span> Chatbot
                 </h1>
                 <h4>
@@ -32,9 +32,9 @@ export default function Home() {
                 </h4>
               </section>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
                 <Image src="/logo.svg" alt="Logo" height={50} width={50} />
-                <h1 className="text-4xl font-bold">
+                <h1 className="text-2xl lg:text-4xl font-bold">
                   The <span className="text-primary">Omnis</span> Chatbot
                 </h1>
               </div>

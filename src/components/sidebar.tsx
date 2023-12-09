@@ -63,7 +63,7 @@ const ChatbotSidebar = () => {
         !isOpen ? "left-[-30rem]" : "left-0 backdrop-blur-sm w-screen"
       } absolute top-0 transition-all duration-300 ease-in-out`}
     >
-      <div className="relative h-screen w-96 bg-secondary rounded-r-lg p-4">
+      <div className="relative h-screen w-80 lg:w-96 bg-secondary rounded-r-lg p-4">
         <Button
           className="flex gap-2 items-center justify-center w-full"
           onClick={createChat}
@@ -95,7 +95,7 @@ const ChatbotSidebar = () => {
           </>
         )}
         <Button
-          className="absolute top-5 right-[-5rem]"
+          className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
           onClick={handleCloseSidebar}
         >
           <X />
