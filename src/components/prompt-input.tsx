@@ -82,15 +82,16 @@ export default function PromptInput() {
   });
 
   useEffect(() => {
-    let savedMessages = localStorage.getItem(chatId);
-    console.log(isChatPresent);
-    if (savedMessages) {
-      handleChatPresenceChange(true);
-      setChatResponse(JSON.parse(savedMessages));
-    } else {
-      console.log("on here");
-      handleChatPresenceChange(false);
-      setChatResponse(null);
+    if (chatId) {
+      let savedMessages = localStorage.getItem(chatId);
+      console.log(isChatPresent);
+      if (savedMessages) {
+        handleChatPresenceChange(true);
+        setChatResponse(JSON.parse(savedMessages));
+      } else {
+        handleChatPresenceChange(false);
+        setChatResponse(null);
+      }
     }
   }, [chatId]);
 

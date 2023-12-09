@@ -2,7 +2,6 @@
 import { Menu, MessagesSquare, Plus, Trash, X } from "lucide-react";
 import { useState, useEffect, useContext } from "react";
 import { Button } from "./ui/button";
-import { ChatIdContext } from "./chatid-provider";
 import {
   Dialog,
   DialogClose,
@@ -11,11 +10,14 @@ import {
   DialogHeader,
 } from "./ui/dialog";
 import { DialogTrigger } from "@radix-ui/react-dialog";
+import { usePathname } from "next/navigation";
+import { ChatIdContext } from "./chatid-provider";
 
 const ChatbotSidebar = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [chats, setChats] = useState<any>([]);
-  const { chatId, setChatId } = useContext(ChatIdContext);
+  const { setChatId } = useContext(ChatIdContext);
   const handleOpenSidebar = () => setIsOpen(true);
   const handleCloseSidebar = () => setIsOpen(false);
   const createChat = () => {
@@ -35,32 +37,38 @@ const ChatbotSidebar = () => {
     }
   };
 
+  const updateChatId = (id: string) => {
+    window.location.href = `/${id}`;
+    setChatId(id);
+  };
+
   const deleteChat = (id: string) => {
     setChats((prevChats: any) => {
       const updatedChats = prevChats.filter((chat: any) => chat.key !== id);
       localStorage.setItem("savedChats", JSON.stringify(updatedChats));
+      window.location.href = `/`;
       return updatedChats;
     });
   };
 
-  const changeChat = (id: string) => {
-    setChatId(id);
-  };
-
   useEffect(() => {
-    let savedChats = localStorage.getItem("savedChats");
-    if (savedChats) {
-      setChats(JSON.parse(savedChats));
-    } else if (chats.length === 0) {
+    let savedChats = JSON.parse(localStorage.getItem("savedChats") || "[]");
+    let chatId = pathname.replace("/", "");
+    let chatIdExists = savedChats.some((chat) => chat.key === chatId);
+    if (savedChats.length > 0) {
+      setChats(savedChats);
+      setChatId(chatId);
+    } else {
       let newChat = {
         key: crypto.randomUUID(),
         name: "New Chat",
       };
       setChats([newChat]);
       localStorage.setItem("savedChats", JSON.stringify([newChat]));
+      updateChatId(newChat.key);
     }
-    if (chats.length > 0 && !chatId) {
-      setChatId(chats[0].key);
+    if (chats.length > 0 && !chatIdExists) {
+      updateChatId(chats[0].key);
     }
   }, [chats.length]);
 
@@ -83,43 +91,46 @@ const ChatbotSidebar = () => {
             <p className="font-bold my-1">Your chats</p>
             <div className="flex flex-col gap-2 my-2 w-full h-[92vh] overflow-y-scroll">
               {chats.map((chat: any) => (
-                <button key={chat.key} onClick={() => changeChat(chat.key)}>
-                  <div className="flex items-center justify-between gap-2 rounded-lg bg-background px-6 py-4">
+                <div
+                  className="flex items-center justify-between gap-2 rounded-lg bg-background px-6 py-4"
+                  key={chat.key}
+                >
+                  <a href={`/${chat.key}`}>
                     <div className="flex gap-3">
                       <MessagesSquare />
                       <span>{chat.name}</span>
                     </div>
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <button className="flex justify-end">
-                          <Trash />
-                        </button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <h1>Do you want to delete the Chat?</h1>
-                        </DialogHeader>
-                        <DialogFooter>
-                          <div className="flex gap-2">
-                            <DialogClose asChild>
-                              <Button type="button" variant="secondary">
-                                No
-                              </Button>
-                            </DialogClose>
-                            <DialogClose asChild>
-                              <Button
-                                onClick={() => deleteChat(chat.key)}
-                                type="button"
-                              >
-                                Yes
-                              </Button>
-                            </DialogClose>
-                          </div>
-                        </DialogFooter>
-                      </DialogContent>
-                    </Dialog>
-                  </div>
-                </button>
+                  </a>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="flex justify-end">
+                        <Trash />
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <h1>Do you want to delete the Chat?</h1>
+                      </DialogHeader>
+                      <DialogFooter>
+                        <div className="flex gap-2">
+                          <DialogClose asChild>
+                            <Button type="button" variant="secondary">
+                              No
+                            </Button>
+                          </DialogClose>
+                          <DialogClose asChild>
+                            <Button
+                              onClick={() => deleteChat(chat.key)}
+                              type="button"
+                            >
+                              Yes
+                            </Button>
+                          </DialogClose>
+                        </div>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </div>
               ))}
             </div>
           </>
