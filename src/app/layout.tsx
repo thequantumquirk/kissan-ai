@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="overflow-hidden">
+    <html lang="en" className="lg:overflow-hidden">
       <head>
         <link rel="icon" href="/favicon.svg" sizes="any" />
       </head>
