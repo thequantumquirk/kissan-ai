@@ -185,7 +185,7 @@ const ChatbotSidebar = () => {
                       </HoverCard>
                       <DialogContent>
                         <DialogHeader>
-                          <h1>Do you want to delete the Chat?</h1>
+                          <h2>Do you want to delete the Chat?</h2>
                         </DialogHeader>
                         <DialogFooter>
                           <div className="flex gap-2">
