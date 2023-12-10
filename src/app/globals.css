@@ -91,3 +91,11 @@ h6 {
   margin-right: 0;
   font-weight: bold;
 }
+
+pre {
+  border: 2px solid grey;
+  border-left: 0.25rem solid green;
+  border-radius: 5px;
+  padding: 0.25rem;
+  white-space: pre-wrap;
+}
