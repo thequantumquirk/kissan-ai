@@ -103,6 +103,18 @@ const ChatbotSidebar = () => {
     }
   }, [chats.length]);
 
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        handleCloseSidebar();
+      }
+    };
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, []);
+
   const renderSidebar = () => (
     <div
       className={`${
