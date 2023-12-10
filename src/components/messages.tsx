@@ -24,7 +24,7 @@ export default function MessagesSection({
                 : "text-white bg-primary"
             } flex justify-end items-center rounded-lg p-2 w-fit`}
           >
-            <div>{parse(message.content)}</div>
+            <div className="whitespace-pre-wrap">{parse(message.content)}</div>
           </div>
         </div>
       ))}
