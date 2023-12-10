@@ -26,4 +26,14 @@ Ready to chat with Omnis? Just click on [Omnis Chatbot](https://omnis-chatbot.ve
 - [ ] Add Multiple Models
 - [ ] Better Animations
 - [ ] More Themes
+
+
+
 - [ ] Database Storage
+
+## Demo
+
+Here's a 2 minute short demo of the chatbot.
+
+https://github.com/fosslover69/omnis-chatbot/assets/67329471/10288b60-f190-4398-8a99-768aacbbf074
+
