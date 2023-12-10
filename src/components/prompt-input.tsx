@@ -14,6 +14,11 @@ import { ChatIdContext } from "./chatid-provider";
 import { ChatContext } from "./chat-provider";
 import { useToast } from "@/components/ui/use-toast";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import remarkRehype from "remark-rehype";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeStringify from "rehype-stringify";
 
 export default function PromptInput() {
   const { toast } = useToast();
@@ -46,6 +51,17 @@ export default function PromptInput() {
     }
   };
 
+  const renderMarkdown = async (markdown: string) => {
+    const file = await unified()
+      .use(remarkParse)
+      .use(remarkRehype)
+      .use(rehypeSanitize)
+      .use(rehypeStringify)
+      .process(markdown);
+
+    return String(file);
+  };
+
   const sendReqQuery = useMutation({
     mutationFn: async (text: string) => {
       handleChatPresenceChange(true);
@@ -64,8 +80,9 @@ export default function PromptInput() {
       );
       return data;
     },
-    onSuccess: (data) => {
-      insertMessage(data.copies[0].content, "assistant");
+    onSuccess: async (data) => {
+      let message = await renderMarkdown(data.copies[0].content);
+      insertMessage(message, "assistant");
     },
     onError: (error) => {
       if (error) {

@@ -1,4 +1,5 @@
 import { MessageType } from "@/types/MessageType";
+import parse from "html-react-parser";
 
 export default function MessagesSection({
   messages,
@@ -23,7 +24,7 @@ export default function MessagesSection({
                 : "text-white bg-primary"
             } flex justify-end items-center rounded-lg p-2 w-fit`}
           >
-            {message.content}
+            <div>{parse(message.content)}</div>
           </div>
         </div>
       ))}
