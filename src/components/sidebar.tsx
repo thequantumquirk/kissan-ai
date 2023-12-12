@@ -23,6 +23,7 @@ import { ChatIdContext } from "./chatid-provider";
 import { ChatType } from "@/types/ChatType";
 import { Input } from "./ui/input";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
@@ -115,13 +116,14 @@ const ChatbotSidebar = () => {
     };
   }, []);
 
-  const renderSidebar = () => (
-    <div
-      className={`${
-        !isOpen ? "left-[-30rem]" : "left-0 backdrop-blur-sm w-screen"
-      } absolute top-0 transition-all duration-300 ease-in-out`}
-    >
-      <div className="relative h-screen w-80 lg:w-96 bg-secondary rounded-r-lg p-4">
+  return (
+    <Sheet>
+      <SheetTrigger>
+        <Button className={`absolute top-5 left-5`}>
+          <Menu />
+        </Button>
+      </SheetTrigger>
+      <SheetContent side={"left"}>
         <Button
           className="flex gap-2 items-center justify-center w-full"
           onClick={createChat}
@@ -135,7 +137,7 @@ const ChatbotSidebar = () => {
             <div className="flex flex-col gap-2 my-2 w-full h-[92vh] overflow-y-scroll">
               {chats.map((chat: ChatType) => (
                 <div
-                  className="flex items-center justify-between gap-2 rounded-lg bg-background px-6 py-4"
+                  className="flex items-center justify-between gap-2 rounded-lg bg-card px-3 py-4"
                   key={chat.key}
                 >
                   {renameChatId !== chat.key ? (
@@ -226,36 +228,19 @@ const ChatbotSidebar = () => {
         )}
         <HoverCard>
           <HoverCardTrigger asChild>
-            <Button
-              className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
-              onClick={handleCloseSidebar}
-            >
-              <X />
-            </Button>
+            <SheetClose asChild>
+              <Button
+                className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
+                onClick={handleCloseSidebar}
+              >
+                <X />
+              </Button>
+            </SheetClose>
           </HoverCardTrigger>
           <HoverCardContent>Close the Sidebar</HoverCardContent>
         </HoverCard>
-      </div>
-    </div>
-  );
-
-  return (
-    <>
-      {!isOpen && (
-        <HoverCard>
-          <HoverCardTrigger asChild>
-            <Button
-              className={`absolute top-5 left-5`}
-              onClick={handleOpenSidebar}
-            >
-              <Menu />
-            </Button>
-          </HoverCardTrigger>
-          <HoverCardContent>Open the Sidebar</HoverCardContent>
-        </HoverCard>
-      )}
-      {renderSidebar()}
-    </>
+      </SheetContent>
+    </Sheet>
   );
 };
 
