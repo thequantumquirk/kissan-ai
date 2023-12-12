@@ -118,9 +118,9 @@ const ChatbotSidebar = () => {
 
   return (
     <Sheet>
-      <SheetTrigger>
-        <Button className={`absolute top-5 left-5`}>
-          <Menu />
+      <SheetTrigger asChild>
+        <Button className={`absolute px-3 top-5 left-5`}>
+          <Menu size={20} />
         </Button>
       </SheetTrigger>
       <SheetContent side={"left"}>

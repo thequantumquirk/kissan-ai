@@ -7,7 +7,6 @@ import { SendHorizonal } from "lucide-react";
 import { useMutation } from "@tanstack/react-query";
 import Loader from "./ui/loader";
 import { MessageType } from "@/types/MessageType";
-import MessagesSection from "./messages";
 import axios from "axios";
 import { AxiosError } from "axios";
 import { ChatIdContext } from "./chatid-provider";
@@ -19,11 +18,12 @@ import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
+import { MessagesContext } from "./messages-provider";
 
 export default function PromptInput() {
   const { toast } = useToast();
   const [prompt, setPrompt] = useState("");
-  const [chatResponse, setChatResponse] = useState<MessageType[] | null>(null);
+  const { setMessages } = useContext(MessagesContext);
   const { chatId } = useContext(ChatIdContext);
   const { isChatPresent, setIsChatPresent } = useContext(ChatContext);
 
@@ -41,7 +41,7 @@ export default function PromptInput() {
       role,
       content: text,
     };
-    setChatResponse((prev: any) => {
+    setMessages((prev: any) => {
       const updatedChatResponse = prev ? [...prev, message] : [message];
       localStorage.setItem(chatId, JSON.stringify(updatedChatResponse));
       return updatedChatResponse;
@@ -102,19 +102,18 @@ export default function PromptInput() {
   useEffect(() => {
     if (chatId) {
       let savedMessages = localStorage.getItem(chatId);
-      if (savedMessages) {
+      if (savedMessages && savedMessages?.length > 0) {
         handleChatPresenceChange(true);
-        setChatResponse(JSON.parse(savedMessages));
+        setMessages(JSON.parse(savedMessages));
       } else {
         handleChatPresenceChange(false);
-        setChatResponse(null);
+        setMessages([]);
       }
     }
   }, [chatId]);
 
   return (
     <>
-      {chatResponse && <MessagesSection messages={chatResponse} />}
       <div className="flex gap-2 items-center">
         <Input
           className="w-[70vw] lg:w-[40vw]"
