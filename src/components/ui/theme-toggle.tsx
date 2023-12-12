@@ -10,15 +10,15 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./hover-card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();
 
   return (
     <DropdownMenu>
-      <HoverCard>
-        <HoverCardTrigger asChild>
+      <Tooltip>
+        <TooltipTrigger asChild>
           <DropdownMenuTrigger asChild>
             <Button size="icon" variant={"outline"}>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -26,9 +26,9 @@ export function ThemeToggle() {
               <span className="sr-only">Toggle theme</span>
             </Button>
           </DropdownMenuTrigger>
-        </HoverCardTrigger>
-        <HoverCardContent>Change the App Theme</HoverCardContent>
-      </HoverCard>
+        </TooltipTrigger>
+        <TooltipContent>Change the App Theme</TooltipContent>
+      </Tooltip>
       <DropdownMenuContent align="end">
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light

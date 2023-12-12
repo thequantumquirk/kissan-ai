@@ -12,13 +12,13 @@ import { AxiosError } from "axios";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatContext } from "./chat-provider";
 import { useToast } from "@/components/ui/use-toast";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkRehype from "remark-rehype";
 import rehypeSanitize from "rehype-sanitize";
 import rehypeStringify from "rehype-stringify";
 import { MessagesContext } from "./messages-provider";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 export default function PromptInput() {
   const { toast } = useToast();
@@ -126,8 +126,8 @@ export default function PromptInput() {
             }
           }}
         />
-        <HoverCard>
-          <HoverCardTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
             <Button
               onClick={() =>
                 !sendReqQuery.isPending && prompt && sendReqQuery.mutate(prompt)
@@ -135,13 +135,13 @@ export default function PromptInput() {
             >
               {sendReqQuery.isPending ? <Loader /> : <SendHorizonal />}
             </Button>
-          </HoverCardTrigger>
-          <HoverCardContent>
+          </TooltipTrigger>
+          <TooltipContent>
             {sendReqQuery.isPending
               ? "Please wait till we fetch your query"
               : "Send your Query"}
-          </HoverCardContent>
-        </HoverCard>
+          </TooltipContent>
+        </Tooltip>
       </div>
     </>
   );

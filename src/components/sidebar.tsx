@@ -22,8 +22,8 @@ import { usePathname } from "next/navigation";
 import { ChatIdContext } from "./chatid-provider";
 import { ChatType } from "@/types/ChatType";
 import { Input } from "./ui/input";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
@@ -124,13 +124,20 @@ const ChatbotSidebar = () => {
         </Button>
       </SheetTrigger>
       <SheetContent side={"left"}>
-        <Button
-          className="flex gap-2 items-center justify-center w-full"
-          onClick={createChat}
-        >
-          <Plus />
-          Create New Chat
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              className="flex gap-2 items-center justify-center w-full"
+              onClick={createChat}
+            >
+              <Plus />
+              Create New Chat
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            Click here to create a new Chat Instance
+          </TooltipContent>
+        </Tooltip>
         {chats && (
           <>
             <p className="font-bold my-1">Your chats</p>
@@ -165,8 +172,8 @@ const ChatbotSidebar = () => {
                     </div>
                   )}
                   <div className="flex gap-4 items-center">
-                    <HoverCard>
-                      <HoverCardTrigger asChild>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
                         <button
                           className="flex justify-end"
                           onClick={() => setRenameChatId(chat.key)}
@@ -176,14 +183,12 @@ const ChatbotSidebar = () => {
                             className="opacity-50 hover:opacity-100 transition-all"
                           />
                         </button>
-                      </HoverCardTrigger>
-                      <HoverCardContent>
-                        Rename the Chat Instance
-                      </HoverCardContent>
-                    </HoverCard>
+                      </TooltipTrigger>
+                      <TooltipContent>Rename the Chat Instance</TooltipContent>
+                    </Tooltip>
                     <Dialog>
-                      <HoverCard>
-                        <HoverCardTrigger asChild>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
                           <DialogTrigger asChild>
                             <button>
                               <Trash
@@ -192,11 +197,11 @@ const ChatbotSidebar = () => {
                               />
                             </button>
                           </DialogTrigger>
-                        </HoverCardTrigger>
-                        <HoverCardContent>
+                        </TooltipTrigger>
+                        <TooltipContent>
                           Delete the Chat Instance
-                        </HoverCardContent>
-                      </HoverCard>
+                        </TooltipContent>
+                      </Tooltip>
                       <DialogContent>
                         <DialogHeader>
                           <h2>Do you want to delete the Chat?</h2>
@@ -226,8 +231,8 @@ const ChatbotSidebar = () => {
             </div>
           </>
         )}
-        <HoverCard>
-          <HoverCardTrigger asChild>
+        <Tooltip>
+          <TooltipTrigger asChild>
             <SheetClose asChild>
               <Button
                 className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
@@ -236,9 +241,9 @@ const ChatbotSidebar = () => {
                 <X />
               </Button>
             </SheetClose>
-          </HoverCardTrigger>
-          <HoverCardContent>Close the Sidebar</HoverCardContent>
-        </HoverCard>
+          </TooltipTrigger>
+          <TooltipContent>Close the Sidebar</TooltipContent>
+        </Tooltip>
       </SheetContent>
     </Sheet>
   );

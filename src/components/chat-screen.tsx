@@ -31,7 +31,7 @@ export default function ChatScreen() {
           <div className="hidden lg:block">
             <Image src="/logo.svg" alt="Logo" height={50} width={50} />
           </div>
-          <h1 className="text-xl 2xl:text-4xl text-left w-full font-bold">
+          <h1 className="text-xl 2xl:text-4xl w-full font-bold">
             The <span className="text-primary">Omnis</span> Chatbot
           </h1>
         </div>
