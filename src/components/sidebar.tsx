@@ -27,14 +27,11 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const ChatbotSidebar = () => {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
   const [chats, setChats] = useState<ChatType[] | []>([]);
   const [renameChatId, setRenameChatId] = useState<string>("");
   const [chatName, setChatName] = useState<string>("");
   const { setChatId } = useContext(ChatIdContext);
 
-  const handleOpenSidebar = () => setIsOpen(true);
-  const handleCloseSidebar = () => setIsOpen(false);
   const handleChatRename = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChatName(e.target.value);
   };
@@ -103,18 +100,6 @@ const ChatbotSidebar = () => {
       updateChatId(chats[0].key);
     }
   }, [chats.length]);
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleCloseSidebar();
-      }
-    };
-    document.addEventListener("keydown", handleKeyPress);
-    return () => {
-      document.removeEventListener("keydown", handleKeyPress);
-    };
-  }, []);
 
   return (
     <Sheet>
@@ -234,10 +219,7 @@ const ChatbotSidebar = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <SheetClose asChild>
-              <Button
-                className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]"
-                onClick={handleCloseSidebar}
-              >
+              <Button className="absolute top-5 lg:right-[-5rem] right-[-4.5rem]">
                 <X />
               </Button>
             </SheetClose>
