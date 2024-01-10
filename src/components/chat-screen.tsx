@@ -19,7 +19,7 @@ export default function ChatScreen() {
         <section className="flex flex-col justify-between items-center">
           <Image src="/logo.svg" alt="Logo" height={100} width={100} />
           <h1 className="text-3xl lg:text-4xl font-bold">
-            The <span className="text-primary">Omnis</span> Chatbot
+            <span className="text-primary">Agritalk.ai</span>
           </h1>
           <h4>
             Ask your <span className="text-primary">queries</span> and get it{" "}
@@ -32,7 +32,7 @@ export default function ChatScreen() {
             <Image src="/logo.svg" alt="Logo" height={50} width={50} />
           </div>
           <h1 className="text-xl 2xl:text-4xl w-full font-bold">
-            The <span className="text-primary">Omnis</span> Chatbot
+            <span className="text-primary">Agritalk</span>.ai
           </h1>
         </div>
       )}
