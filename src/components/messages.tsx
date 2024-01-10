@@ -7,7 +7,7 @@ export default function MessagesSection({
   messages: MessageType[];
 }) {
   return (
-    <div className="grow h-full flex flex-col gap-2 overflow-y-scroll">
+    <div className="grow h-full flex text-lg flex-col gap-2 overflow-y-scroll">
       {messages.map((message) => (
         <div
           key={message.id}
@@ -22,7 +22,7 @@ export default function MessagesSection({
               message.role === "assistant"
                 ? "bg-background"
                 : "text-white bg-primary"
-            } flex justify-end items-center rounded-lg p-2 w-fit`}
+            } flex justify-end items-center rounded-lg p-2 w-fit max-w-4xl`}
           >
             <div className="whitespace-pre-wrap">{parse(message.content)}</div>
           </div>
