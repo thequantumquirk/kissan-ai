@@ -64,24 +64,24 @@ export default function PromptInput() {
 
   const sendReqQuery = useMutation({
     mutationFn: async (text: string) => {
+      let inputForm = new FormData();
+      inputForm.append("language", "English");
+      inputForm.append("question", text);
       handleChatPresenceChange(true);
       insertMessage(text, "user");
       const { data } = await axios.post(
-        "https://api-v2.longshot.ai/custom/api/generate/instruct",
-        {
-          text,
-        },
+        "https://api1.kissangpt.com/v1/inference/text/web",
+        inputForm,
         {
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_LONGSHOT_KEY}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
       return data;
     },
     onSuccess: async (data) => {
-      let message = await renderMarkdown(data.copies[0].content);
+      let message = await renderMarkdown(data.answer);
       insertMessage(message, "assistant");
     },
     onError: (error) => {
