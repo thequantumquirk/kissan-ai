@@ -7,7 +7,7 @@ export default function MessagesSection({
   messages: MessageType[];
 }) {
   return (
-    <div className="grow h-full flex text-lg flex-col gap-2 overflow-y-scroll">
+    <div className="grow h-full flex text-lg flex-col gap-2">
       {messages.map((message) => (
         <div
           key={message.id}

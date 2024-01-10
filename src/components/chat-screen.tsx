@@ -38,7 +38,7 @@ export default function ChatScreen() {
       )}
       <ChatbotSidebar />
       {messages.length > 0 && (
-        <section className="grow w-full h-full bg-foreground/10 lg:px-8 px-2 py-4 rounded-lg">
+        <section className="grow w-full h-full bg-foreground/10 lg:px-8 px-2 py-4 rounded-lg overflow-y-scroll">
           <MessagesSection messages={messages} />
         </section>
       )}
