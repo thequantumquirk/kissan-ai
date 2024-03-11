@@ -8,13 +8,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 const plusJakarta = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Omins Chatbot",
-  description: "The universal chat bot",
+  title: "Agritalk AI",
+  description: "Simple solution for Tamilnadu Farmers",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: {       
   children: React.ReactNode;
 }) {
   return (

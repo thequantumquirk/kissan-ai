@@ -24,7 +24,7 @@ export default function Home() {
               <section className="flex flex-col justify-between items-center h-full">
                 <Image src="/logo.svg" alt="Logo" height={100} width={100} />
                 <h1 className="text-3xl lg:text-4xl font-bold">
-                  The <span className="text-primary">Omnis</span> Chatbot
+                 <span className="text-primary">Agritalk</span> AI
                 </h1>
                 <h4>
                   Ask your <span className="text-primary">queries</span> and get
@@ -35,7 +35,7 @@ export default function Home() {
               <div className="flex gap-2 items-center">
                 <Image src="/logo.svg" alt="Logo" height={50} width={50} />
                 <h1 className="text-2xl lg:text-4xl font-bold">
-                  The <span className="text-primary">Omnis</span> Chatbot
+                  The <span className="text-primary">Agritalk</span> AI
                 </h1>
               </div>
             )}

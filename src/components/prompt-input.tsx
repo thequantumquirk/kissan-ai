@@ -92,7 +92,7 @@ export default function PromptInput() {
             detail: string;
           }) || "Unknown error";
         toast({
-          title: "An error occured.",
+          title: "An error occoured",
           description: detail,
         });
       }
