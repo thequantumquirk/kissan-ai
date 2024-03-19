@@ -4,14 +4,27 @@ import { ChatIdContext } from "@/components/chatid-provider";
 import PromptInput from "@/components/prompt-input";
 import ChatbotSidebar from "@/components/sidebar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { UserIdContext } from "@/components/userid-provider";
+import { supabase } from "@/supabase";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function Home() {
   const queryClient = new QueryClient();
   const [isChatPresent, setIsChatPresent] = useState(false);
   const [chatId, setChatId] = useState("");
+  const { setUserId } = useContext(UserIdContext);
+  const checkUser = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    console.log("user", user);
+    setUserId(user?.id || "");
+  };
+  useEffect(() => {
+    checkUser();
+  });
   return (
     <QueryClientProvider client={queryClient}>
       <ChatContext.Provider value={{ isChatPresent, setIsChatPresent }}>
@@ -24,7 +37,7 @@ export default function Home() {
               <section className="flex flex-col justify-between items-center h-full">
                 <Image src="/logo.svg" alt="Logo" height={100} width={100} />
                 <h1 className="text-3xl lg:text-4xl font-bold">
-                 <span className="text-primary">Agritalk</span> AI
+                  <span className="text-primary">Agritalk</span> AI
                 </h1>
                 <h4>
                   Ask your <span className="text-primary">queries</span> and get
